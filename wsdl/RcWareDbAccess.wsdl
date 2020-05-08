@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="HistoryDbAccessService" targetNamespace="http://dev.rcware.eu/esgdb"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex"
+                  xmlns:wsa10="http://www.w3.org/2005/08/addressing"
+                  xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                  xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+                  xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy"
+                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="http://dev.rcware.eu/esgdb"
+                  xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+                  xmlns:i1="http://dev.rcware.eu/esgdb_HTTP_GZIP"
+                  xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                  xmlns:i0="http://dev.rcware.eu/esgdb_HTTP" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://dev.rcware.eu/esgdb/Imports">
+            <xsd:import schemaLocation="xsd0.xml" namespace="http://dev.rcware.eu/esgdb"/>
+            <xsd:import schemaLocation="xsd1.xml" namespace="http://schemas.microsoft.com/2003/10/Serialization/"/>
+            <xsd:import schemaLocation="xsd2.xml" namespace="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+            <xsd:import schemaLocation="xsd3.xml" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+        </xsd:schema>
+    </wsdl:types>
+
+    <wsdl:message name="HistoryDbAccess_SaveData_InputMessage">
+        <wsdl:part name="parameters" element="tns:SaveData"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_SaveData_OutputMessage">
+        <wsdl:part name="parameters" element="tns:SaveDataResponse"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_GetData_InputMessage">
+        <wsdl:part name="parameters" element="tns:GetData"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_GetData_OutputMessage">
+        <wsdl:part name="parameters" element="tns:GetDataResponse"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_GetParticularData_InputMessage">
+        <wsdl:part name="parameters" element="tns:GetParticularData"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_GetParticularData_OutputMessage">
+        <wsdl:part name="parameters" element="tns:GetParticularDataResponse"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_CheckCredentials_InputMessage">
+        <wsdl:part name="parameters" element="tns:CheckCredentials"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_CheckCredentials_OutputMessage">
+        <wsdl:part name="parameters" element="tns:CheckCredentialsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_ServerAlive_InputMessage">
+        <wsdl:part name="parameters" element="tns:ServerAlive"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_ServerAlive_OutputMessage">
+        <wsdl:part name="parameters" element="tns:ServerAliveResponse"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_GetAllVariables_InputMessage">
+        <wsdl:part name="parameters" element="tns:GetAllVariables"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_GetAllVariables_OutputMessage">
+        <wsdl:part name="parameters" element="tns:GetAllVariablesResponse"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_GetVariables_InputMessage">
+        <wsdl:part name="parameters" element="tns:GetVariables"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_GetVariables_OutputMessage">
+        <wsdl:part name="parameters" element="tns:GetVariablesResponse"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_AddMetadata_InputMessage">
+        <wsdl:part name="parameters" element="tns:AddMetadata"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_AddMetadata_OutputMessage">
+        <wsdl:part name="parameters" element="tns:AddMetadataResponse"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_GetMetadata_InputMessage">
+        <wsdl:part name="parameters" element="tns:GetMetadata"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_GetMetadata_OutputMessage">
+        <wsdl:part name="parameters" element="tns:GetMetadataResponse"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_UpdateMetadata_InputMessage">
+        <wsdl:part name="parameters" element="tns:UpdateMetadata"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_UpdateMetadata_OutputMessage">
+        <wsdl:part name="parameters" element="tns:UpdateMetadataResponse"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_DeleteMetadata_InputMessage">
+        <wsdl:part name="parameters" element="tns:DeleteMetadata"/>
+    </wsdl:message>
+    <wsdl:message name="HistoryDbAccess_DeleteMetadata_OutputMessage">
+        <wsdl:part name="parameters" element="tns:DeleteMetadataResponse"/>
+    </wsdl:message>
+
+    <wsdl:portType name="HistoryDbAccessPort">
+        <wsdl:operation name="SaveData">
+            <wsdl:input wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/SaveData"
+                        message="tns:HistoryDbAccess_SaveData_InputMessage"/>
+            <wsdl:output wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/SaveDataResponse"
+                         message="tns:HistoryDbAccess_SaveData_OutputMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetData">
+            <wsdl:input wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetData"
+                        message="tns:HistoryDbAccess_GetData_InputMessage"/>
+            <wsdl:output wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetDataResponse"
+                         message="tns:HistoryDbAccess_GetData_OutputMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetParticularData">
+            <wsdl:input wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetParticularData"
+                        message="tns:HistoryDbAccess_GetParticularData_InputMessage"/>
+            <wsdl:output wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetParticularDataResponse"
+                         message="tns:HistoryDbAccess_GetParticularData_OutputMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="CheckCredentials">
+            <wsdl:input wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/CheckCredentials"
+                        message="tns:HistoryDbAccess_CheckCredentials_InputMessage"/>
+            <wsdl:output wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/CheckCredentialsResponse"
+                         message="tns:HistoryDbAccess_CheckCredentials_OutputMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="ServerAlive">
+            <wsdl:input wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/ServerAlive"
+                        message="tns:HistoryDbAccess_ServerAlive_InputMessage"/>
+            <wsdl:output wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/ServerAliveResponse"
+                         message="tns:HistoryDbAccess_ServerAlive_OutputMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetAllVariables">
+            <wsdl:input wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetAllVariables"
+                        message="tns:HistoryDbAccess_GetAllVariables_InputMessage"/>
+            <wsdl:output wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetAllVariablesResponse"
+                         message="tns:HistoryDbAccess_GetAllVariables_OutputMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetVariables">
+            <wsdl:input wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetVariables"
+                        message="tns:HistoryDbAccess_GetVariables_InputMessage"/>
+            <wsdl:output wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetVariablesResponse"
+                         message="tns:HistoryDbAccess_GetVariables_OutputMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="AddMetadata">
+            <wsdl:input wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/AddMetadata"
+                        message="tns:HistoryDbAccess_AddMetadata_InputMessage"/>
+            <wsdl:output wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/AddMetadataResponse"
+                         message="tns:HistoryDbAccess_AddMetadata_OutputMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="GetMetadata">
+            <wsdl:input wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetMetadata"
+                        message="tns:HistoryDbAccess_GetMetadata_InputMessage"/>
+            <wsdl:output wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetMetadataResponse"
+                         message="tns:HistoryDbAccess_GetMetadata_OutputMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="UpdateMetadata">
+            <wsdl:input wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/UpdateMetadata"
+                        message="tns:HistoryDbAccess_UpdateMetadata_InputMessage"/>
+            <wsdl:output wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/UpdateMetadataResponse"
+                         message="tns:HistoryDbAccess_UpdateMetadata_OutputMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteMetadata">
+            <wsdl:input wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/DeleteMetadata"
+                        message="tns:HistoryDbAccess_DeleteMetadata_InputMessage"/>
+            <wsdl:output wsaw:Action="http://dev.rcware.eu/esgdb/HistoryDbAccess/DeleteMetadataResponse"
+                         message="tns:HistoryDbAccess_DeleteMetadata_OutputMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="HistoryAccess" type="tns:HistoryDbAccessPort">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="SaveData">
+            <soap:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/SaveData" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetData">
+            <soap:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetData" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetParticularData">
+            <soap:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetParticularData" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="CheckCredentials">
+            <soap:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/CheckCredentials" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ServerAlive">
+            <soap:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/ServerAlive" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetAllVariables">
+            <soap:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetAllVariables" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetVariables">
+            <soap:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetVariables" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="AddMetadata">
+            <soap:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/AddMetadata" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetMetadata">
+            <soap:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetMetadata" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="UpdateMetadata">
+            <soap:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/UpdateMetadata" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteMetadata">
+            <soap:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/DeleteMetadata" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsp:Policy wsu:Id="HistoryAccessGZip_policy">
+      <wsp:ExactlyOne>
+        <wsp:All>
+          <gzip:GZipEncoding xmlns:gzip="http://schemas.microsoft.com/ws/06/2004/mspolicy/netgzip1"/>
+          <wsaw:UsingAddressing/>
+        </wsp:All>
+      </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsdl:binding name="HistoryAccessGZip" type="tns:HistoryDbAccessPort">
+        <wsp:PolicyReference URI="#HistoryAccessGZip_policy"/>
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="SaveData">
+            <soap12:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/SaveData" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetData">
+            <soap12:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetData" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetParticularData">
+            <soap12:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetParticularData"
+                              style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="CheckCredentials">
+            <soap12:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/CheckCredentials"
+                              style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="ServerAlive">
+            <soap12:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/ServerAlive" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetAllVariables">
+            <soap12:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetAllVariables" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetVariables">
+            <soap12:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetVariables" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="AddMetadata">
+            <soap12:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/AddMetadata" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="GetMetadata">
+            <soap12:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/GetMetadata" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="UpdateMetadata">
+            <soap12:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/UpdateMetadata" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="DeleteMetadata">
+            <soap12:operation soapAction="http://dev.rcware.eu/esgdb/HistoryDbAccess/DeleteMetadata" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+
+    <wsdl:service name="HistoryDbAccessService">
+        <wsdl:port name="HistoryAccess" binding="tns:HistoryAccess">
+            <soap:address location="http://db.solarpro.bg:9876/RcWareDbAccess"/>
+        </wsdl:port>
+        <wsdl:port name="HistoryAccessGZip" binding="tns:HistoryAccessGZip">
+            <soap12:address location="http://db.solarpro.bg:9876/RcWareDbGZipAccess"/>
+            <wsa10:EndpointReference>
+                <wsa10:Address>http://db.solarpro.bg:9876/RcWareDbGZipAccess</wsa10:Address>
+            </wsa10:EndpointReference>
+        </wsdl:port>
+        <wsdl:port name="HistoryAccess1" binding="tns:HistoryAccess">
+            <soap:address location="http://db.solarpro.bg:9876/EsgDbAccess"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

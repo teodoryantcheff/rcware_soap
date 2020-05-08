@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://dev.rcware.eu/esgdb"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://dev.rcware.eu/esgdb">
+
+    <xs:element name="SaveData">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="credentials" type="q1:Credentials" xmlns:q1="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="records" nillable="true" type="q2:ArrayOfValueRecord" xmlns:q2="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="SaveDataResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="SaveDataResult" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GetData">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="credentials" type="q3:Credentials" xmlns:q3="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="variablesKey" nillable="true" type="q4:ArrayOfArrayOfKeyValuePair" xmlns:q4="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="utcFrom" type="xs:dateTime"/>
+                <xs:element minOccurs="0" name="utcTo" type="xs:dateTime"/>
+                <xs:element minOccurs="0" name="variableOffset" type="xs:int"/>
+                <xs:element minOccurs="0" name="variableCount" type="xs:int"/>
+                <xs:element minOccurs="0" name="valueOffset" type="xs:int"/>
+                <xs:element minOccurs="0" name="valueCount" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GetDataResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="GetDataResult" nillable="true" type="q5:ArrayOfMvr" xmlns:q5="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="nextVariableOffset" type="xs:int"/>
+                <xs:element minOccurs="0" name="nextValueOffset" type="xs:int"/>
+                <xs:element minOccurs="0" name="returnCode" nillable="true" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GetParticularData">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="credentials" type="q6:Credentials" xmlns:q6="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="variableKeys" nillable="true" type="q7:ArrayOfArrayOfKeyValuePair" xmlns:q7="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="referenceTime" nillable="true" type="xs:dateTime"/>
+                <xs:element minOccurs="0" name="dataSpecification" type="q8:ParticularDataSpecification" xmlns:q8="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="variableOffset" type="xs:int"/>
+                <xs:element minOccurs="0" name="variableCount" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GetParticularDataResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="GetParticularDataResult" nillable="true" type="q9:ArrayOfMvr"
+                            xmlns:q9="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="nextVariableOffset" type="xs:int"/>
+                <xs:element minOccurs="0" name="returnCode" nillable="true" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="CheckCredentials">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="credentials" type="q10:Credentials"
+                            xmlns:q10="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="CheckCredentialsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="CheckCredentialsResult" type="xs:boolean"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ServerAlive">
+        <xs:complexType>
+            <xs:sequence/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ServerAliveResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="ServerAliveResult" type="xs:boolean"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GetAllVariables">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="credentials" type="q11:Credentials"
+                            xmlns:q11="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="offset" type="xs:int"/>
+                <xs:element minOccurs="0" name="count" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GetAllVariablesResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="GetAllVariablesResult" nillable="true"
+                            type="q12:ArrayOfVariableDescription"
+                            xmlns:q12="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="moreDataAvailable" type="xs:boolean"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GetVariables">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="credentials" type="q13:Credentials"
+                            xmlns:q13="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="variableKeys" nillable="true" type="q14:ArrayOfArrayOfKeyValuePair"
+                            xmlns:q14="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="offset" type="xs:int"/>
+                <xs:element minOccurs="0" name="count" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GetVariablesResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="GetVariablesResult" nillable="true"
+                            type="q15:ArrayOfVariableDescription"
+                            xmlns:q15="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="nextOffset" type="xs:int"/>
+                <xs:element minOccurs="0" name="returnCode" nillable="true" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="AddMetadata">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="credentials" type="q16:Credentials"
+                            xmlns:q16="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="records" nillable="true" type="q17:ArrayOfMetadataRecord"
+                            xmlns:q17="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="AddMetadataResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="AddMetadataResult" nillable="true" type="q18:ArrayOfMetadataRecord"
+                            xmlns:q18="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="returnCode" nillable="true" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GetMetadata">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="credentials" type="q19:Credentials"
+                            xmlns:q19="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="recordSpecifications" nillable="true"
+                            type="q20:ArrayOfMetadataKeyValueItem"
+                            xmlns:q20="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="valueMatch" type="q21:MetadataValueMatch"
+                            xmlns:q21="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="offset" type="xs:int"/>
+                <xs:element minOccurs="0" name="count" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GetMetadataResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="GetMetadataResult" nillable="true" type="q22:ArrayOfMetadataRecord"
+                            xmlns:q22="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="nextOffset" type="xs:int"/>
+                <xs:element minOccurs="0" name="returnCode" nillable="true" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="UpdateMetadata">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="credentials" type="q23:Credentials"
+                            xmlns:q23="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="records" nillable="true" type="q24:ArrayOfMetadataRecord"
+                            xmlns:q24="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="UpdateMetadataResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="UpdateMetadataResult" nillable="true" type="q25:ArrayOfMetadataRecord"
+                            xmlns:q25="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="returnCode" nillable="true" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="DeleteMetadata">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="credentials" type="q26:Credentials"
+                            xmlns:q26="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"/>
+                <xs:element minOccurs="0" name="recordIds" nillable="true" type="q27:ArrayOfint"
+                            xmlns:q27="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="DeleteMetadataResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" name="returnCode" nillable="true" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

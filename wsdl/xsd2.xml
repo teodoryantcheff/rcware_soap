@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared">
+
+    <xs:complexType name="Credentials">
+        <xs:annotation>
+            <xs:appinfo>
+                <IsValueType xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsValueType>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string"/>
+            <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="Credentials" nillable="true" type="tns:Credentials"/>
+    <xs:complexType name="ArrayOfValueRecord">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="ValueRecord" nillable="true" type="tns:ValueRecord"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="ArrayOfValueRecord" nillable="true" type="tns:ArrayOfValueRecord"/>
+    <xs:complexType name="ValueRecord">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="BlobValue" nillable="true" type="xs:base64Binary">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <DefaultValue EmitDefaultValue="false"
+                                      xmlns="http://schemas.microsoft.com/2003/10/Serialization/"/>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="BooleanValue" type="xs:boolean">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <DefaultValue EmitDefaultValue="false"
+                                      xmlns="http://schemas.microsoft.com/2003/10/Serialization/"/>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="DateTimeValue" type="xs:dateTime">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <DefaultValue EmitDefaultValue="false"
+                                      xmlns="http://schemas.microsoft.com/2003/10/Serialization/"/>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="DoubleValue" type="xs:double">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <DefaultValue EmitDefaultValue="false"
+                                      xmlns="http://schemas.microsoft.com/2003/10/Serialization/"/>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="ForceSave" type="xs:boolean"/>
+            <xs:element minOccurs="0" name="GoodThrough" type="xs:dateTime"/>
+            <xs:element minOccurs="0" name="HistoryValueType" type="tns:HistoryValueType"/>
+            <xs:element minOccurs="0" name="Int64Value" type="xs:long">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <DefaultValue EmitDefaultValue="false"
+                                      xmlns="http://schemas.microsoft.com/2003/10/Serialization/"/>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="Interval" type="xs:double"/>
+            <xs:element minOccurs="0" name="Keys" nillable="true" type="tns:ArrayOfKeyValuePair"/>
+            <xs:element minOccurs="0" name="StringValue" nillable="true" type="xs:string">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <DefaultValue EmitDefaultValue="false"
+                                      xmlns="http://schemas.microsoft.com/2003/10/Serialization/"/>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="UtcTimeStamp" type="xs:dateTime"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="ValueRecord" nillable="true" type="tns:ValueRecord"/>
+    <xs:simpleType name="HistoryValueType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Double"/>
+            <xs:enumeration value="Blob"/>
+            <xs:enumeration value="String"/>
+            <xs:enumeration value="Int64"/>
+            <xs:enumeration value="NotDefined"/>
+            <xs:enumeration value="ISODateTime"/>
+            <xs:enumeration value="Boolean"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="HistoryValueType" nillable="true" type="tns:HistoryValueType"/>
+    <xs:complexType name="ArrayOfKeyValuePair">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValuePair" nillable="true"
+                        type="tns:KeyValuePair"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="ArrayOfKeyValuePair" nillable="true" type="tns:ArrayOfKeyValuePair"/>
+    <xs:complexType name="KeyValuePair">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="IsKey" type="xs:boolean"/>
+            <xs:element minOccurs="0" name="Key" nillable="true" type="xs:string"/>
+            <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="KeyValuePair" nillable="true" type="tns:KeyValuePair"/>
+    <xs:complexType name="ArrayOfArrayOfKeyValuePair">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="ArrayOfKeyValuePair" nillable="true"
+                        type="tns:ArrayOfKeyValuePair"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="ArrayOfArrayOfKeyValuePair" nillable="true" type="tns:ArrayOfArrayOfKeyValuePair"/>
+    <xs:complexType name="ArrayOfMvr">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="Mvr" nillable="true" type="tns:Mvr"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="ArrayOfMvr" nillable="true" type="tns:ArrayOfMvr"/>
+    <xs:complexType name="Mvr">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="Keys" nillable="true" type="tns:ArrayOfKeyValuePair"/>
+            <xs:element minOccurs="0" name="Vals" nillable="true" type="tns:ArrayOfI"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="Mvr" nillable="true" type="tns:Mvr"/>
+    <xs:complexType name="ArrayOfI">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="I" nillable="true" type="tns:I"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="ArrayOfI" nillable="true" type="tns:ArrayOfI"/>
+    <xs:complexType name="I">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="BinV" nillable="true" type="xs:base64Binary">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <DefaultValue EmitDefaultValue="false"
+                                      xmlns="http://schemas.microsoft.com/2003/10/Serialization/"/>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="Bv" nillable="true" type="xs:boolean">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <DefaultValue EmitDefaultValue="false"
+                                      xmlns="http://schemas.microsoft.com/2003/10/Serialization/"/>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="Dtv" nillable="true" type="xs:dateTime">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <DefaultValue EmitDefaultValue="false"
+                                      xmlns="http://schemas.microsoft.com/2003/10/Serialization/"/>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="Dv" nillable="true" type="xs:double">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <DefaultValue EmitDefaultValue="false"
+                                      xmlns="http://schemas.microsoft.com/2003/10/Serialization/"/>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="Fs" type="xs:boolean">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <DefaultValue EmitDefaultValue="false"
+                                      xmlns="http://schemas.microsoft.com/2003/10/Serialization/"/>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="Gt" type="xs:dateTime"/>
+            <xs:element minOccurs="0" name="Hvt" type="tns:HistoryValueType"/>
+            <xs:element minOccurs="0" name="Iv" nillable="true" type="xs:long">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <DefaultValue EmitDefaultValue="false"
+                                      xmlns="http://schemas.microsoft.com/2003/10/Serialization/"/>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="Ivl" type="xs:double"/>
+            <xs:element minOccurs="0" name="Sv" nillable="true" type="xs:string">
+                <xs:annotation>
+                    <xs:appinfo>
+                        <DefaultValue EmitDefaultValue="false"
+                                      xmlns="http://schemas.microsoft.com/2003/10/Serialization/"/>
+                    </xs:appinfo>
+                </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="Ts" type="xs:dateTime"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="I" nillable="true" type="tns:I"/>
+    <xs:simpleType name="ParticularDataSpecification">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="MinTimestamp"/>
+            <xs:enumeration value="MaxTimestamp"/>
+            <xs:enumeration value="FirstLessThanReferenceDateTime"/>
+            <xs:enumeration value="FirstLessThanOrEqualThanReferenceTime"/>
+            <xs:enumeration value="FirstGretaerThanReferenceDateTime"/>
+            <xs:enumeration value="FirstGreaterThanOrEqualThanReferenceTime"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="ParticularDataSpecification" nillable="true" type="tns:ParticularDataSpecification"/>
+    <xs:complexType name="ArrayOfVariableDescription">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="VariableDescription" nillable="true"
+                        type="tns:VariableDescription"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="ArrayOfVariableDescription" nillable="true" type="tns:ArrayOfVariableDescription"/>
+    <xs:complexType name="VariableDescription">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="Keys" nillable="true" type="tns:ArrayOfKeyValuePair"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="VariableDescription" nillable="true" type="tns:VariableDescription"/>
+    <xs:complexType name="ArrayOfMetadataRecord">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="MetadataRecord" nillable="true"
+                        type="tns:MetadataRecord"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="ArrayOfMetadataRecord" nillable="true" type="tns:ArrayOfMetadataRecord"/>
+    <xs:complexType name="MetadataRecord">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="Id" nillable="true" type="xs:int"/>
+            <xs:element minOccurs="0" name="KeyValueItems" nillable="true" type="tns:ArrayOfMetadataKeyValueItem"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="MetadataRecord" nillable="true" type="tns:MetadataRecord"/>
+    <xs:complexType name="ArrayOfMetadataKeyValueItem">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="MetadataKeyValueItem"
+                        type="tns:MetadataKeyValueItem"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="ArrayOfMetadataKeyValueItem" nillable="true" type="tns:ArrayOfMetadataKeyValueItem"/>
+    <xs:complexType name="MetadataKeyValueItem">
+        <xs:annotation>
+            <xs:appinfo>
+                <IsValueType xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsValueType>
+            </xs:appinfo>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element minOccurs="0" name="Key" nillable="true" type="xs:string"/>
+            <xs:element minOccurs="0" name="Value" nillable="true" type="q1:ArrayOfstring"
+                        xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="MetadataKeyValueItem" nillable="true" type="tns:MetadataKeyValueItem"/>
+    <xs:simpleType name="MetadataValueMatch">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ValuesUnion"/>
+            <xs:enumeration value="ValuesIntersection"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="MetadataValueMatch" nillable="true" type="tns:MetadataValueMatch"/>
+</xs:schema>
