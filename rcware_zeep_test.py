@@ -17,6 +17,17 @@ comm_status = '839DCBB6-55BB-4CB3-BE01-F242E0B3EAC1'
 
 print('Alive:', client.service.ServerAlive())
 
+# AddMetadata(ns1: Credentials; credentials, ns1: ArrayOfMetadataRecord; records)
+# CheckCredentials(ns1: Credentials; credentials)
+# DeleteMetadata(ns1: Credentials; credentials, ns3: ArrayOfint; recordIds)
+# GetAllVariables(ns1: Credentials; credentials, xs: int; offset, xs: int; count)
+# GetData(ns1: Credentials; credentials, ns1: ArrayOfArrayOfKeyValuePair; variablesKey, xs: dateTime; utcFrom, xs: dateTime; utcTo, xs: int; variableOffset, xs: int; variableCount, xs: int; valueOffset, xs: int; valueCount)
+# GetMetadata(ns1: Credentials; credentials, ns1: ArrayOfMetadataKeyValueItem; recordSpecifications, ns1: MetadataValueMatch; valueMatch, xs: int; offset, xs: int; count)
+# GetParticularData(ns1: Credentials; credentials, ns1: ArrayOfArrayOfKeyValuePair; variableKeys, xs: dateTime; referenceTime, ns1: ParticularDataSpecification; dataSpecification, xs: int; variableOffset, xs: int; variableCount) GetVariables(ns1: Credentials; credentials, ns1: ArrayOfArrayOfKeyValuePair; variableKeys, xs: int; offset, xs: int; count)
+# SaveData(ns1: Credentials; credentials, ns1: ArrayOfValueRecord; records)
+# ServerAlive()
+# UpdateMetadata(ns1: Credentials; credentials, ns1: ArrayOfMetadataRecord; records)
+
 creds = {
     'Name': username,
     'Password': password
