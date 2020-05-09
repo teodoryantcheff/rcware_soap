@@ -1,5 +1,6 @@
 import csv
-import logging
+import time
+from datetime import datetime
 
 import zeep
 
@@ -37,17 +38,39 @@ print('Check Creds:', client.service.CheckCredentials(creds))
 
 factory = client.type_factory('http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared')
 
-kvp = factory.KeyValuePair(IsKey=True, Key='DPGuid', Value='C4C1EDF3-BACD-4552-9323-92E57D326907')
+# kvp = factory.KeyValuePair(IsKey=True, Key='DPGuid', Value='C4C1EDF3-BACD-4552-9323-92E57D326907')
+kvp = factory.KeyValuePair(Key='DPGuid', Value='C4C1EDF3-BACD-4552-9323-92E57D326907')
 akvp = factory.ArrayOfKeyValuePair(kvp)
 aakvp = factory.ArrayOfArrayOfKeyValuePair(akvp)
 
 # creds = factory.Credentials(Name=username, Password=password)
 
+
+kkk = {
+    "Key": "DPGuid",
+    "Value": "C4C1EDF3-BACD-4552-9323-92E57D326907"
+}
+
+res = client.service.GetData(
+    credentials=creds,
+    variablesKey=aakvp,
+    # variablesKey=factory.ArrayOfArrayOfKeyValuePair(factory.ArrayOfKeyValuePair(factory.KeyValuePair(**kkk))),
+    utcFrom='2020-01-08T10:00:00Z',
+    # utcTo='2020-01-09T12:00:00Z',
+    utcTo=datetime.utcnow(),
+    variableOffset=0,
+    variableCount=2,
+    valueOffset=0,
+    valueCount=30000,
+)
+
+if res['returnCode'] != "0;OK;":
+    exit(res['returnCode'])
+
 # ValueItem class description
-# • "Hvt"–HistoryValueType– type of value (Double, Blob, String, Int64,
-# NotDefined, ISODateTime, Boolean)
-# • "Ivl"–Interval – interval in which the value was saved
-# • "Ts"–UtcTimeStamp – time at which the value was valid
+# • "Hvt" – HistoryValueType– type of value (Double, Blob, String, Int64, NotDefined, ISODateTime, Boolean)
+# • "Ivl" – Interval – interval in which the value was saved
+# • "Ts" – UtcTimeStamp – time at which the value was valid
 # • "Gt" – GoodThrough – time by which the value is valid
 # • "Bv" – BooleanValue
 # • "Dv" – DoubleValue
@@ -56,23 +79,16 @@ aakvp = factory.ArrayOfArrayOfKeyValuePair(akvp)
 # • "BinV" – BlobValue
 # • "Dtv" - DateTimeValue
 
-res = client.service.GetData(
-    credentials=creds,
-    variablesKey=aakvp,
-    utcFrom='2020-01-08T10:00:00Z',
-    utcTo='2020-01-08T12:00:00Z',
-    variableOffset=0,
-    variableCount=1,
-    valueOffset=0,
-    valueCount=10,
-)
 
-print(res)
+for mvr in res['GetDataResult']['Mvr']:
+    for v in mvr['Vals']['I']:
+        print(f"{v['Ts'].strftime('%Y-%m-%d %H:%M:%S.%f %Z')} {v['Dv']:7} {v['Ivl']:7}")
+    print('--')
 
 
 def extract_variables():
     offset = 0
-    count = 500
+    count = 2000
     keys = [
         "ClientId",
         "DPGuid",
@@ -84,24 +100,30 @@ def extract_variables():
     ]
     variables = []
     while True:
-        res = client.service.GetAllVariables(credentials=creds, offset=offset, count=count)
+        r = client.service.GetAllVariables(credentials=creds, offset=offset, count=count)
+        if r['GetAllVariablesResult'] is None or 'GetAllVariablesResult' not in r:
+            print(r)
+            break
 
-        for vardesc in res['GetAllVariablesResult']['VariableDescription']:
+        for vardesc in r['GetAllVariablesResult']['VariableDescription']:
             try:
                 var = {kvp['Key']: kvp['Value'] for kvp in vardesc['Keys']['KeyValuePair'] if kvp['Key'] in keys}
-                if var: # not an empty dict
+                if var:  # not an empty dict
                     variables.append(var)
             except Exception as e:
                 print(e)
-        if not res['moreDataAvailable']:
+
+        print(len(variables))  # some status
+
+        if not r['moreDataAvailable']:
             break
-        print(offset) # some status
+
         offset += count
 
-                # try:
-                #     print(f"{kvp['IsKey']:1} {kvp['Key']:20s} {kvp['Value']:30s}")
-                # except:
-                #     pass
+        # try:
+        #     print(f"{kvp['IsKey']:1} {kvp['Key']:20s} {kvp['Value']:30s}")
+        # except:
+        #     pass
 
     print("read:", len(variables))
 
@@ -109,3 +131,8 @@ def extract_variables():
         dict_writer = csv.DictWriter(output_file, keys)
         dict_writer.writeheader()
         dict_writer.writerows(variables)
+
+
+# start = time.time()
+# extract_variables()
+# print("done in ", time.time() - start)
