@@ -33,57 +33,76 @@ creds = {
     'Name': username,
     'Password': password
 }
+# creds = factory.Credentials(Name=username, Password=password)
 print('Check Creds:', client.service.CheckCredentials(creds))
 # print('Check Creds:', client.service.CheckCredentials(Name=username, Password=password))
+
 
 factory = client.type_factory('http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared')
 
 # kvp = factory.KeyValuePair(IsKey=True, Key='DPGuid', Value='C4C1EDF3-BACD-4552-9323-92E57D326907')
-kvp = factory.KeyValuePair(Key='DPGuid', Value='C4C1EDF3-BACD-4552-9323-92E57D326907')
-akvp = factory.ArrayOfKeyValuePair(kvp)
-aakvp = factory.ArrayOfArrayOfKeyValuePair(akvp)
+ac_power_kvp = factory.KeyValuePair(Key='DPGuid', Value='5175E60D-C94A-45CE-9F9D-E8F3E5A00C8D')  # AC_power
+dc_power_kvp = factory.KeyValuePair(Key='DPGuid', Value='C4C1EDF3-BACD-4552-9323-92E57D326907')  # DC_power
+plant_malevo_kvp = factory.KeyValuePair(Key='StationName', Value='FVE_MALEVO')
+plant_panchevo_kvp = factory.KeyValuePair(Key='StationName', Value='FVE_PANCHEVO')
 
-# creds = factory.Credentials(Name=username, Password=password)
+ac_malevo_kvp = factory.ArrayOfKeyValuePair([ac_power_kvp, plant_malevo_kvp])
+ac_panchevo_kvp = factory.ArrayOfKeyValuePair([ac_power_kvp, plant_panchevo_kvp])
 
+dc_malevo_kvp = factory.ArrayOfKeyValuePair([dc_power_kvp, plant_malevo_kvp])
+dc_panchevo_kvp = factory.ArrayOfKeyValuePair([dc_power_kvp, plant_panchevo_kvp])
 
-kkk = {
-    "Key": "DPGuid",
-    "Value": "C4C1EDF3-BACD-4552-9323-92E57D326907"
-}
+# akvp2 = factory.ArrayOfKeyValuePair(kvp_ac)
+aakvp = factory.ArrayOfArrayOfKeyValuePair([
+    ac_malevo_kvp,
+    ac_panchevo_kvp,
+    dc_malevo_kvp,
+    dc_panchevo_kvp
+])
 
-res = client.service.GetData(
-    credentials=creds,
-    variablesKey=aakvp,
-    # variablesKey=factory.ArrayOfArrayOfKeyValuePair(factory.ArrayOfKeyValuePair(factory.KeyValuePair(**kkk))),
-    utcFrom='2020-01-08T10:00:00Z',
-    # utcTo='2020-01-09T12:00:00Z',
-    utcTo=datetime.utcnow(),
-    variableOffset=0,
-    variableCount=2,
-    valueOffset=0,
-    valueCount=30000,
-)
+# print(aakvp)
 
-if res['returnCode'] != "0;OK;":
-    exit(res['returnCode'])
+var_offset = 0
+while True:
+    res = client.service.GetData(
+        credentials=creds,
+        variablesKey=aakvp,
+        # variablesKey=factory.ArrayOfArrayOfKeyValuePair(factory.ArrayOfKeyValuePair(factory.KeyValuePair(**kkk))),
+        utcFrom='2020-05-10T15:00:00Z',
+        # utcTo='2020-01-10T12:00:00Z',
+        utcTo=datetime.utcnow(),
+        variableOffset=var_offset,
+        variableCount=4,
+        valueOffset=0,
+        valueCount=3000,
+    )
 
-# ValueItem class description
-# • "Hvt" – HistoryValueType– type of value (Double, Blob, String, Int64, NotDefined, ISODateTime, Boolean)
-# • "Ivl" – Interval – interval in which the value was saved
-# • "Ts" – UtcTimeStamp – time at which the value was valid
-# • "Gt" – GoodThrough – time by which the value is valid
-# • "Bv" – BooleanValue
-# • "Dv" – DoubleValue
-# • "Iv" - Int64Value
-# • "Sv" – StringValue
-# • "BinV" – BlobValue
-# • "Dtv" - DateTimeValue
+    if res['returnCode'] != "0;OK;":
+        exit(res['returnCode'])
 
+    # print(res)
 
-for mvr in res['GetDataResult']['Mvr']:
-    for v in mvr['Vals']['I']:
-        print(f"{v['Ts'].strftime('%Y-%m-%d %H:%M:%S.%f %Z')} {v['Dv']:7} {v['Ivl']:7}")
-    print('--')
+    # ValueItem class description
+    # • "Hvt" – HistoryValueType– type of value (Double, Blob, String, Int64, NotDefined, ISODateTime, Boolean)
+    # • "Ivl" – Interval – interval in which the value was saved
+    # • "Ts" – UtcTimeStamp – time at which the value was valid
+    # • "Gt" – GoodThrough – time by which the value is valid
+    # • "Bv" – BooleanValue
+    # • "Dv" – DoubleValue
+    # • "Iv" - Int64Value
+    # • "Sv" – StringValue
+    # • "BinV" – BlobValue
+    # • "Dtv" - DateTimeValue
+
+    for mvr in res['GetDataResult']['Mvr']:
+        print([k['Value'] for k in mvr['Keys']['KeyValuePair'] if k['Key'] in ['DPName', 'StationName']])
+        for v in mvr['Vals']['I']:
+            print(f"{v['Ts'].strftime('%Y-%m-%d %H:%M:%S.%f %Z')} {v['Dv']:7} {v['Ivl']:7}")
+        print('--')
+
+    var_offset = res['nextVariableOffset']
+    if var_offset == -1:
+        break
 
 
 def extract_variables():
