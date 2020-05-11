@@ -14,8 +14,6 @@ settings = zeep.Settings(strict=True, xml_huge_tree=True, force_https=False, raw
 # Available ports are HistoryAccess, HistoryAccessGZip, HistoryAccess1. Only HistoryAccess seems to be alive.
 client = zeep.Client(wsdl=wsdl, settings=settings, port_name='HistoryAccess')
 
-comm_status = '839DCBB6-55BB-4CB3-BE01-F242E0B3EAC1'
-
 print('Alive:', client.service.ServerAlive())
 
 # AddMetadata(ns1: Credentials; credentials, ns1: ArrayOfMetadataRecord; records)
@@ -41,7 +39,18 @@ print('Check Creds:', client.service.CheckCredentials(creds))
 factory = client.type_factory('http://schemas.datacontract.org/2004/07/ESG.Db.Server.Shared')
 
 # kvp = factory.KeyValuePair(IsKey=True, Key='DPGuid', Value='C4C1EDF3-BACD-4552-9323-92E57D326907')
-ac_power_kvp = factory.KeyValuePair(Key='DPGuid', Value='5175E60D-C94A-45CE-9F9D-E8F3E5A00C8D')  # AC_power
+# kvp = factory.KeyValuePair(**{
+#     'IsKey': True,
+#     'Key': 'DPGuid',
+#     'Value': 'C4C1EDF3-BACD-4552-9323-92E57D326907'
+# })
+
+# ac_power_kvp = factory.KeyValuePair(Key='DPGuid', Value='5175E60D-C94A-45CE-9F9D-E8F3E5A00C8D')  # AC_power
+ac_power_kvp = factory.KeyValuePair(**{
+    'Key': 'DPGuid',
+    'Value': '5175E60D-C94A-45CE-9F9D-E8F3E5A00C8D'
+})  # AC_power
+
 dc_power_kvp = factory.KeyValuePair(Key='DPGuid', Value='C4C1EDF3-BACD-4552-9323-92E57D326907')  # DC_power
 plant_malevo_kvp = factory.KeyValuePair(Key='StationName', Value='FVE_MALEVO')
 plant_panchevo_kvp = factory.KeyValuePair(Key='StationName', Value='FVE_PANCHEVO')
@@ -62,13 +71,14 @@ aakvp = factory.ArrayOfArrayOfKeyValuePair([
 
 # print(aakvp)
 
+start = time.time()
 var_offset = 0
 while True:
     res = client.service.GetData(
         credentials=creds,
         variablesKey=aakvp,
         # variablesKey=factory.ArrayOfArrayOfKeyValuePair(factory.ArrayOfKeyValuePair(factory.KeyValuePair(**kkk))),
-        utcFrom='2020-05-10T15:00:00Z',
+        utcFrom='2020-05-11T08:00:00Z',
         # utcTo='2020-01-10T12:00:00Z',
         utcTo=datetime.utcnow(),
         variableOffset=var_offset,
@@ -97,26 +107,19 @@ while True:
     for mvr in res['GetDataResult']['Mvr']:
         print([k['Value'] for k in mvr['Keys']['KeyValuePair'] if k['Key'] in ['DPName', 'StationName']])
         for v in mvr['Vals']['I']:
-            print(f"{v['Ts'].strftime('%Y-%m-%d %H:%M:%S.%f %Z')} {v['Dv']:7} {v['Ivl']:7}")
+            print(f"{v['Gt'].strftime('%Y-%m-%d %H:%M:%S.%f %Z')} {v['Dv']:7} ")
         print('--')
 
     var_offset = res['nextVariableOffset']
     if var_offset == -1:
         break
 
+print("done in ", time.time() - start)
 
 def extract_variables():
     offset = 0
     count = 2000
-    keys = [
-        "ClientId",
-        "DPGuid",
-        "DPName",
-        "GroupName",
-        "HistoryType",
-        "StationName",
-        "TechDPName"
-    ]
+    keys = ("ClientId", "DPGuid", "DPName", "GroupName", "HistoryType", "StationName", "TechDPName")
     variables = []
     while True:
         r = client.service.GetAllVariables(credentials=creds, offset=offset, count=count)
