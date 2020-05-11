@@ -92,7 +92,8 @@ def read_rcware_measurements(rcw_mapping: dict, since: datetime, to=datetime.utc
                 break
 
             for mvr in res['GetDataResult']['Mvr']:
-                data.append(rcw_to_influx(mvr, rcw_mapping))
+                for dp in rcw_to_influx(mvr, rcw_mapping):
+                    data.append(dp)
 
             val_offset = res['nextValueOffset']
             if val_offset == -1:  # no more values to read
