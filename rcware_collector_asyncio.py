@@ -4,8 +4,8 @@ import time
 from datetime import datetime, timedelta
 
 import zeep
-from influxdb import InfluxDBClient
 from zeep.asyncio import AsyncTransport
+from influxdb import InfluxDBClient
 
 from credentials import username, password
 
@@ -50,6 +50,9 @@ def rcw_to_influx(mvr):
 
     datapoints = []
 
+    if not mvr['Vals']:
+        raise Exception('no values')
+
     for value in mvr['Vals']['I']:
         ts = value['Gt']
         val = value['Dv']
@@ -91,7 +94,7 @@ async def read_single_measurement(semaphore, rcw_measurement, since: datetime, t
             )
 
             if res['returnCode'] != "0;OK;":
-                print(res['returnCode'], plant, uuid)
+                print(plant, uuid, res['returnCode'])
                 break
 
             try:
@@ -99,7 +102,7 @@ async def read_single_measurement(semaphore, rcw_measurement, since: datetime, t
                     for dp in rcw_to_influx(mvr):
                         data.append(dp)
             except Exception:
-                print(res, rcw_measurement)
+                print(rcw_measurement, res)
                 raise
 
             val_offset = res['nextValueOffset']
@@ -135,10 +138,11 @@ if __name__ == '__main__':
             print(exceptions[0])
         print(int(start), len(results), "dps done in", f'{time.time() - start:.2f}s', f'exceptions: {len(exceptions)}')
         # print(results)
+        data = [r[0] for r in results if not isinstance(r, Exception)]
 
-        # influxdb.create_database('rcware_test')
-        # influxdb.switch_database('rcware_test')
-        # influxdb.write_points(data)
+        influxdb.create_database('rcware_test')
+        influxdb.switch_database('rcware_test')
+        influxdb.write_points(data)
 
         time.sleep(300 - (time.time() - start))
 
