@@ -48,7 +48,7 @@ def rcw_to_influx(mvr, rcw_mapping):
 
         dp_dict = rcw_mapping[lookup]
 
-        data_point = {
+        dp = {
             "measurement": dp_dict['measurement'],
             "tags": {tag: dp_dict[tag] for tag in ["device", "plant", "device_type"]},
             "time": ts,
@@ -56,7 +56,7 @@ def rcw_to_influx(mvr, rcw_mapping):
                 "value": float(val)
             }
         }
-        datapoints.append(data_point)
+        datapoints.append(dp)
     return datapoints
 
 
@@ -69,7 +69,6 @@ def read_rcware_measurements(rcw_mapping: dict, since: datetime, to=datetime.utc
     :return: List of dictionaries ready for insertion in influxdb
     """
     data = []
-    now = datetime.utcnow()
 
     for rcw_msrmt in rcw_mapping:
         # Make key value pairs for GetData
@@ -83,7 +82,7 @@ def read_rcware_measurements(rcw_mapping: dict, since: datetime, to=datetime.utc
                 credentials=creds,
                 variablesKey=aakvp,
                 utcFrom=since,
-                utcTo=now,
+                utcTo=to,
                 variableOffset=0,
                 variableCount=1,
                 valueOffset=val_offset,
@@ -100,7 +99,7 @@ def read_rcware_measurements(rcw_mapping: dict, since: datetime, to=datetime.utc
                         data.append(dp)
             except Exception:
                 print(res, rcw_msrmt)
-                break
+                raise
 
             val_offset = res['nextValueOffset']
             if val_offset == -1:  # no more values to read for current variable
@@ -117,7 +116,7 @@ if __name__ == '__main__':
     while True:
         start = time.time()
         data = read_rcware_measurements(config, datetime.utcnow() - timedelta(minutes=5))
-        print(int(start), len(data), "dps done in", f'{time.time() - start:.2}')
+        print(int(start), len(data), "dps done in", f'{time.time() - start:.2f}')
         # print(data)
 
         influxdb.create_database('rcware_test')
