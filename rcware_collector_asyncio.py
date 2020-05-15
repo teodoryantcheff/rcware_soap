@@ -142,8 +142,8 @@ if __name__ == '__main__':
     while True:
         start = time.time()
         now = datetime.utcnow()
-        since = now-timedelta(minutes=7)
-        # since = now-timedelta(days=14)
+        # since = now-timedelta(minutes=7)
+        since = now-timedelta(hours=6)
         results = loop.run_until_complete(read_rcware_measurements(since=since, to=now))
         exceptions = [r for r in results if isinstance(r, Exception)]
         # if exceptions:
@@ -153,11 +153,14 @@ if __name__ == '__main__':
         # data = [r[0] for r in results if not isinstance(r, Exception)]
         data = [dp for r in results if not isinstance(r, Exception) for dp in r]
         print(int(start), len(data), "dps done in", f'{time.time() - start:.2f}s', f'exceptions: {len(exceptions)}')
+
+        start = time.time()
         print('writing to influx')
         influxdb.create_database('sdb')
         influxdb.switch_database('sdb')
         influxdb.write_points(data, batch_size=20000)
-        print('influx done')
+        print(f'influx done in {time.time()-start:.2f}s')
+        break
         time.sleep(300 - (time.time() - start))
 
     # loop.run_until_complete(transport.session.close())
